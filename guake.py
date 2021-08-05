@@ -1,4 +1,4 @@
-#http://npm.taobao.org/mirrors/chromedriver
+#http://npm.taobao.org/mirrors/chromedriver将下载的.exe文件放置在python根目录即可
 from selenium import webdriver
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
@@ -52,3 +52,31 @@ if mes.text !="审核":
 #关闭当前窗口，主要使用close而不是quite
     time.sleep(10)
     driver.switch_to.window(current_handle)
+
+
+#获取当前页面的链接地址
+url=driver.current_url
+driver.get("http://baike.so.com")
+#后退
+driver.back()
+#前进
+driver.forward()
+#刷新
+driver.refresh()
+#浏览器退出
+ele=driver.switch_to.active_element
+driver.find_element_by_link_text("良医")
+driver.find_element_by_partial_link_text("医")
+#获取元素的大小
+ele_size=input_element.size
+#获取该元素的子元素
+input_element.find_element()
+#判断元素是否显示
+input_element.is_displayed()
+#判断元素是否可以使用
+input_element.is_enabled()
+#判断元素是否是选中状态
+input_element.is_selected()
+
+from selenium.webdriver.support.wait import WebDriverWait
+WebDriverWait(driver,最大等待时间，检查频率).until()

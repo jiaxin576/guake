@@ -33,6 +33,8 @@ driver.switch_to.frame(driver.find_element_by_xpath("html/frameset/frameset/fram
 if mes.text !="审核":
  
 #获取当前页面句柄
+
+
     current_handle = driver.current_window_handle
     driver.switch_to.default_content()
 #接下来会有新的窗口打开，获取所有窗口句柄
@@ -80,3 +82,53 @@ input_element.is_selected()
 
 from selenium.webdriver.support.wait import WebDriverWait
 WebDriverWait(driver,最大等待时间，检查频率).until()
+
+记得要把浏览器调到100%，否则控件找的不准确。
+from selenium import webdriver
+option = webdriver.ChromeOptions()
+option.add_argument(r"user-data-dir=C:\Users\Administrator\AppData\Local\Google\Chrome\User Data")
+driver = webdriver.Chrome(chrome_options=option)
+driver.get("http://www.baidu.com/") #打开
+
+
+两种方式获取cookIe
+打开网页手工输入登录信息
+driver.get('http://udm')  # 打开界面
+dictCookies = driver.get_cookies()
+jsonCookies = json.dumps(dictCookies)
+# 登录完成后，将cookie保存到本地文件
+with open('cookies.json', 'w') as f:
+    f.write(jsonCookies)
+读取登录时存储到本地的cookie
+with open('cookies.json', 'r', encoding='utf-8') as f:
+    listCookies = json.loads(f.read())
+driver.delete_all_cookies()
+for cookie in listCookies:
+    driver.add_cookie({
+        'domain': '.zte.com',  # 此处xxx.com前，需要带点
+        'name': cookie['name'],
+        'value': cookie['value'],
+        'path': '/',
+        'expires': None
+    })
+
+读取cookie实现免登陆访问
+time.sleep(5)
+driver.refresh()
+
+抓包
+def cookies_parse(cookies):
+    parsed_cookies = []
+    #cookies = urllib.unquote(cookies)  # urldecode
+    cookies = cookies.split(';')
+    for cookie in cookies:
+        cookie = cookie.strip()
+        name = cookie.split('=')[0]  # 将空格替换为+
+        value = cookie.split('=')[1]
+        parsed_cookies.append({'name': name, 'value': value})
+    return parsed_cookies
+
+driver.delete_all_cookies()
+
+for cookie in cookies_parse(Cookie):
+    driver.add_cookie(cookie)
